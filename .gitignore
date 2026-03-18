@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+dist/
+build/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Communication folder (local only, used to share files/photos with Claude)
+Prompts/
+
+# Nested git metadata from embedded wiki
+references/wiki/.git/
