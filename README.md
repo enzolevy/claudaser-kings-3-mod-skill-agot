@@ -8,8 +8,8 @@
 
 | Skill | Scope | Repo |
 |-------|-------|------|
-| **Claudaser Kings 3** (vanilla) | Base CK3 modding — 27 pattern guides, .info files, script_docs | [claudaser-kings-3-mod-skill](https://github.com/enzolevy/claudaser-kings-3-mod-skill) |
-| **Claudaser Kings 3 — AGOT Edition** (this repo) | AGOT sub-modding — all vanilla content + 37 AGOT guides | [claudaser-kings-3-mod-skill-agot](https://github.com/enzolevy/claudaser-kings-3-mod-skill-agot) |
+| **Claudaser Kings 3** (vanilla) | Base CK3 modding — 27 pattern guides, .info files, script_docs | [claudaser-kings-3-mod-skill](https://github.com/elevybar/claudaser-kings-3-mod-skill) |
+| **Claudaser Kings 3 — AGOT Edition** (this repo) | AGOT sub-modding — all vanilla content + 37 AGOT guides | [claudaser-kings-3-mod-skill-agot](https://github.com/elevybar/claudaser-kings-3-mod-skill-agot) |
 
 Use the **vanilla skill** if you're modding base CK3. Use the **AGOT Edition** if you're creating sub-mods for A Game of Thrones.
 
@@ -37,15 +37,15 @@ This is the **AGOT Edition** of Claudaser Kings 3. It includes everything from t
 ### Option 1: Personal skill (available in all your projects)
 
 ```bash
-git clone https://github.com/enzolevy/claudaser-kings-3-mod-skill.git \
-  ~/.claude/skills/ck3-modding
+git clone https://github.com/elevybar/claudaser-kings-3-mod-skill-agot.git \
+  ~/.claude/skills/claudaser-kings-3-agot
 ```
 
 ### Option 2: Project skill (available only in one project)
 
 ```bash
-git clone https://github.com/enzolevy/claudaser-kings-3-mod-skill.git \
-  .claude/skills/ck3-modding
+git clone https://github.com/elevybar/claudaser-kings-3-mod-skill-agot.git \
+  .claude/skills/claudaser-kings-3-agot
 ```
 
 ## Setup
