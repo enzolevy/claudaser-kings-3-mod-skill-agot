@@ -166,6 +166,23 @@ AGOT sub-mod creation, naming conventions, scripted API reference, Submod Core i
 
 See [references/agot/agot-index.md](references/agot/agot-index.md) for the full index.
 
+## Keeping Up with AGOT Updates
+
+The AGOT team ships updates frequently — sometimes weekly. I'll do my best to keep the skill documentation in sync, but given the pace of development, some guides may lag behind. To help with this, the skill includes a script that fetches the latest release notes from [r/CK3AGOT](https://www.reddit.com/r/CK3AGOT/) and compares them to your installed version:
+
+```bash
+# Show the latest AGOT release
+./scripts/check_agot_updates.sh
+
+# Show full changelog (Additions, Changes, Fixes)
+./scripts/check_agot_updates.sh --changelog
+
+# Compare your installed version with the latest releases
+./scripts/check_agot_updates.sh --check
+```
+
+If a release introduces new systems or significantly changes existing ones, the affected guides in `references/agot/` may need updating. The changelog sections make it easy to identify which systems were touched.
+
 ## Future Plans
 
 - 🔧 **Advanced Paradox Script parser** / CLI tool
@@ -174,6 +191,10 @@ See [references/agot/agot-index.md](references/agot/agot-index.md) for the full 
 ## Acknowledgments
 
 This skill stands on the shoulders of giants:
+
+### The AGOT Team
+
+This skill would not exist without the incredible work of the [A Game of Thrones](https://steamcommunity.com/sharedfiles/filedetails/?id=2962333032) mod team. AGOT is one of the most ambitious total conversion mods ever made for a Paradox game — 14GB, 550+ event files, 389 scripted_effects/triggers files, a complete custom map, and dozens of unique systems (dragons, mega wars, Valyrian steel, banking, knighthood, Night's Watch, and more). The code quality and architectural consistency of the mod made it possible to systematically document these systems. Special thanks also to the AGOT Submod Core team for building the compatibility framework that makes the sub-mod ecosystem work. The AGOT community on [r/CK3AGOT](https://www.reddit.com/r/CK3AGOT/) and the [AGOT Discord](https://discord.gg/agotmod) are essential resources for anyone modding in this space.
 
 ### Sililex/ck3-claude-skill
 
