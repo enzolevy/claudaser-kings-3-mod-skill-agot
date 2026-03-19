@@ -1,5 +1,8 @@
 # Creating a Casus Belli — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-casus-belli.md](../agot/agot-ext-casus-belli.md)
+
 ## What You Need to Know First
 Casus belli (CB) types define the rules for declaring and resolving wars: what can be targeted, who can use it, and what happens on victory/defeat/white peace. CBs are defined in `common/casus_belli_types/`.
 > Reference docs: references/wiki/wiki_pages/Scripting.md (no dedicated CB wiki page — refer to vanilla files and .info files)

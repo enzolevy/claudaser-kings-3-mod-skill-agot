@@ -1,5 +1,8 @@
 # Map Data Modding
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-map.md](../agot/agot-ext-map.md)
+
 ## What You Need to Know First
 - Map data lives in `map_data/` and controls the physical world: provinces, terrain, rivers, seas, adjacencies, and positions
 - Map modding is the most technically demanding area of CK3 modding -- most files are tightly coupled and a mistake in one often causes crashes or invisible errors in others

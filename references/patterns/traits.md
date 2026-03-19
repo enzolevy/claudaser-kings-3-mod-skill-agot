@@ -1,5 +1,8 @@
 # Creating Traits — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-traits.md](../agot/agot-ext-traits.md)
+
 ## What You Need to Know First
 Traits modify character attributes, opinions, personality, and other parameters. They're defined in `common/traits/` and need localization and an icon.
 > Reference docs: references/wiki/wiki_pages/Trait_modding.md, references/wiki/wiki_pages/Modifier_list.md

@@ -1,5 +1,8 @@
 # Modifying the GUI — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-gui.md](../agot/agot-ext-gui.md)
+
 ## What You Need to Know First
 CK3's GUI uses `.gui` files (similar to HTML) in the `gui/` folder. GUI mods change the checksum but since patch 1.9 they don't disable achievements. Use `-debug_mode -develop` launch options for auto-reloading.
 > Reference docs: references/wiki/wiki_pages/Interface.md

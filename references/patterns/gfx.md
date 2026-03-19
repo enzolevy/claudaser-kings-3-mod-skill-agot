@@ -1,5 +1,8 @@
 # Adding Graphical Assets — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-gfx.md](../agot/agot-ext-gfx.md)
+
 ## What You Need to Know First
 CK3 uses DDS files for most textures and has specific requirements for different asset types. Coat of arms have their own scripting system. Portrait modifications use DNA modifiers.
 > Reference docs: references/wiki/wiki_pages/Graphical_assets.md, references/wiki/wiki_pages/Coat_of_arms_modding.md

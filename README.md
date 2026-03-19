@@ -4,13 +4,22 @@
 
 <!-- Replace YOUR_USERNAME with your GitHub username throughout this file -->
 
+## Related Skills
+
+| Skill | Scope | Repo |
+|-------|-------|------|
+| **Claudaser Kings 3** (vanilla) | Base CK3 modding — 27 pattern guides, .info files, script_docs | [claudaser-kings-3-mod-skill](https://github.com/enzolevy/claudaser-kings-3-mod-skill) |
+| **Claudaser Kings 3 — AGOT Edition** (this repo) | AGOT sub-modding — all vanilla content + 37 AGOT guides | [claudaser-kings-3-mod-skill-agot](https://github.com/enzolevy/claudaser-kings-3-mod-skill-agot) |
+
+Use the **vanilla skill** if you're modding base CK3. Use the **AGOT Edition** if you're creating sub-mods for A Game of Thrones.
+
 ## The Problem
 
 Paradox Script — the proprietary DSL used by Crusader Kings 3 — is poorly documented. The official wiki is often outdated, and the real reference is buried in the game files themselves. LLMs confidently hallucinate triggers, effects, and syntax that don't exist, making AI-assisted CK3 modding frustrating and error-prone.
 
 ## The Solution
 
-Claudaser Kings 3 is a Claude Code skill that extracts documentation directly from the game files (`.info` files + `script_docs`), wraps it with actionable recipes and utility scripts, and enforces anti-hallucination guardrails that force verification against real sources. No external wiki dependency — everything comes from the game itself.
+This is the **AGOT Edition** of Claudaser Kings 3. It includes everything from the vanilla skill plus 37 dedicated guides for A Game of Thrones sub-modding — covering dragons, Valyrian steel, mega wars, banking, knighthood, Night's Watch, Kingsguard, coronation, piracy, colonization, ruins, and all 16 vanilla systems that AGOT modifies. All documentation is sourced directly from the AGOT mod files (14GB, 550+ event files).
 
 ## Features
 
@@ -142,9 +151,23 @@ Contributions are welcome! You can help by:
 
 Pattern files should follow the established format: context → minimal template → vanilla example → variants → checklist → pitfalls.
 
+## AGOT Guides
+
+This skill adds `references/agot/` with 37 guides organized in three categories:
+
+### Unique AGOT Systems (18 guides)
+Dragons (bonding, combat, lifecycle, tree), Valyrian Steel, Knighthood, Banking & Iron Bank, Colonization, Ruins & Rebuilding, Night's Watch, Kingsguard, Maesters & Citadel, Piracy, Mega Wars, Coronation, Bastards & Bloodlines, Magic Level, Faceless Men, and the AGOT Submod Core compatibility framework.
+
+### Vanilla Extension Guides (16 guides)
+Casus Belli, Character Interactions, Decisions, Story Cycles, Buildings, Culture, Traits, Men-at-Arms, GUI, On Actions, Scripted Library, GFX, Map, Ethnicities & DNA, Religion, Governments & Laws.
+
+### Setup
+AGOT sub-mod creation, naming conventions, scripted API reference, Submod Core integration.
+
+See [references/agot/agot-index.md](references/agot/agot-index.md) for the full index.
+
 ## Future Plans
 
-- 🐉 **AGOT sub-skill** — A Game of Thrones mod-specific conventions and systems (dragons, Valyrian steel, mega-wars, coronation, custom map, and more)
 - 🔧 **Advanced Paradox Script parser** / CLI tool
 - 📖 **More pattern recipes** based on community feedback
 

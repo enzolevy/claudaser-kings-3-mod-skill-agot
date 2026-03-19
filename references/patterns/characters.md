@@ -1,5 +1,8 @@
 # Character Interactions and Character Modding — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-characters.md](../agot/agot-ext-characters.md)
+
 ## What You Need to Know First
 Character interactions are actions one character performs on another. They're defined in `common/character_interactions/` and use `scope:actor` (initiator) and `scope:recipient` (target). For adding/editing historical characters, see `history/characters/`.
 > Reference docs: references/wiki/wiki_pages/Interactions_modding.md, references/wiki/wiki_pages/Characters_modding.md

@@ -1,5 +1,9 @@
 # Modifying Culture and Religion — Practical Recipe
 
+> **AGOT:** Culture and religion are significantly modified by AGOT.
+> Before modding culture for AGOT, also read: [references/agot/agot-ext-culture.md](../agot/agot-ext-culture.md)
+> Before modding religion for AGOT, also read: [references/agot/agot-ext-religion.md](../agot/agot-ext-religion.md)
+
 ## What You Need to Know First
 Cultures are defined in `common/culture/cultures/` and religions in `common/religion/religions/`. Both use a hierarchical structure: culture groups contain cultures, religion families contain religions which contain faiths.
 > Reference docs: references/wiki/wiki_pages/Culture_modding.md, references/wiki/wiki_pages/Religions_modding.md

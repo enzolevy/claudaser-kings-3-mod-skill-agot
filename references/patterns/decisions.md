@@ -1,5 +1,8 @@
 # Creating Decisions — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-decisions.md](../agot/agot-ext-decisions.md)
+
 ## What You Need to Know First
 Decisions are optional actions available to the player (and optionally AI) through the decision panel. They require a script file in `common/decisions/` and localization entries.
 > Reference docs: references/wiki/wiki_pages/Decisions_modding.md

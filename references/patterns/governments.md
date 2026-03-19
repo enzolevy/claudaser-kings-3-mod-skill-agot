@@ -1,5 +1,8 @@
 # Creating Governments -- Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-governments.md](../agot/agot-ext-governments.md)
+
 ## What You Need to Know First
 Governments define how a ruler's realm operates: which holdings they use, how vassals contribute taxes/levies, what succession rules apply, what AI behaviors are enabled, and what modifiers the ruler gets. They are defined in `common/governments/` and need localization plus a map color.
 

@@ -1,5 +1,8 @@
 # Creating Story Cycles — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-story-cycles.md](../agot/agot-ext-story-cycles.md)
+
 ## What You Need to Know First
 Story cycles are long-running narrative engines that periodically fire events on a character over time. They drive multi-event arcs (pet ownership, murder mysteries, invasions) by checking conditions on a timer and triggering events when conditions are met. A story cycle has an owner (a character), stores variables on itself, and ticks effect groups at configurable intervals until explicitly ended.
 

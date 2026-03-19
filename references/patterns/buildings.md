@@ -1,5 +1,8 @@
 # Buildings
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-buildings.md](../agot/agot-ext-buildings.md)
+
 ## What You Need to Know First
 - Buildings are defined in `common/buildings/`
 - Buildings modify a county's stats (tax, levy, development, etc.)

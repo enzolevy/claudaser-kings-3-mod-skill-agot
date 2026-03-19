@@ -11,7 +11,15 @@ description: >
   has many non-obvious pitfalls that require consulting reference documentation.
 ---
 
-# CK3 Modding Skill
+# CK3 Modding Skill — AGOT Edition
+
+This is an **AGOT (A Game of Thrones) sub-modding** skill. It covers both vanilla CK3
+systems and AGOT's total conversion additions.
+
+> **CRITICAL AGOT RULE:** Before using ANY vanilla pattern guide in `references/patterns/`,
+> ALWAYS check if a matching `agot-ext-*.md` exists in `references/agot/`. If it does,
+> you MUST read BOTH the vanilla guide AND the AGOT extension guide. AGOT heavily modifies
+> 16 vanilla systems — using vanilla-only patterns will produce broken or incompatible mods.
 
 Paradox Script is a proprietary DSL used by Crusader Kings 3. It is poorly documented
 and full of non-obvious pitfalls. This skill provides reference documentation,
@@ -21,16 +29,20 @@ actionable recipes, and utility scripts for CK3 modding.
 
 Never invent triggers, effects, scopes, or Paradox Script syntax.
 Always consult the relevant .info file in references/info/ before writing code.
-Verify against: .info files > script_docs > vanilla game files > patterns.
+Verify against: .info files > script_docs > AGOT source files > vanilla game files > patterns.
 Do NOT use web search unless the user explicitly requests it.
+**For AGOT sub-mods**: always search AGOT's scripted_effects/ and scripted_triggers/ for
+existing API before writing custom logic.
 
 ## Source of Truth Hierarchy
 
 ```
 1. .info files (references/info/)          — Paradox's own syntax documentation (~166 files)
 2. script_docs (references/script_docs/)   — Generated trigger/effect/scope/modifier lists
-3. Vanilla game files ($CK3_GAME_PATH)     — Real implementations and patterns
-4. Patterns (references/patterns/)         — Actionable recipes with pitfalls
+3. AGOT source files (AGOT mod path)       — AGOT's actual implementations
+4. Vanilla game files ($CK3_GAME_PATH)     — Real implementations and patterns
+5. AGOT guides (references/agot/)          — AGOT-specific patterns and pitfalls
+6. Vanilla patterns (references/patterns/) — Base recipes (check AGOT extension first!)
 ```
 
 The .info files are THE definitive reference for syntax. They document every key,
@@ -39,6 +51,11 @@ writing code for a system.
 
 script_docs are the exhaustive list of all effects, triggers, scopes, and modifiers
 that exist in the game. When unsure if a trigger/effect exists, search script_docs.
+
+**AGOT mod path:**
+```
+C:/Program Files (x86)/Steam/steamapps/workshop/content/1158310/2962333032
+```
 
 ## Configuration
 
@@ -91,6 +108,49 @@ First-time setup instructions: read references/setup.md
 - Add localization → references/patterns/localization.md
 - Set up a new mod → references/patterns/mod-setup.md
 - Understand AI behavior/weighting → references/patterns/ai.md
+
+### I want to mod an AGOT system
+- **First-time AGOT setup** → references/agot/agot-setup.md
+- **AGOT Submod Core** (portrait/accessory compat) → references/agot/agot-submod-core.md
+- **Full AGOT guide index** → references/agot/agot-index.md
+
+#### AGOT-Unique Systems
+- Dragons (bonding & taming) → references/agot/agot-dragons-bonding.md
+- Dragons (combat & warfare) → references/agot/agot-dragons-combat.md
+- Dragons (eggs, genetics, dragonpit) → references/agot/agot-dragons-lifecycle.md
+- Dragons (tree, story cycles, dreams) → references/agot/agot-dragons-tree.md
+- Valyrian steel swords → references/agot/agot-valyrian-steel.md
+- Knighthood & squirehood → references/agot/agot-knighthood.md
+- Banking & Iron Bank → references/agot/agot-banking.md
+- Colonization & ruin rebuilding → references/agot/agot-colonization.md
+- Night's Watch → references/agot/agot-nights-watch.md
+- Kingsguard → references/agot/agot-kingsguard.md
+- Maesters & Citadel → references/agot/agot-maesters.md
+- Piracy → references/agot/agot-piracy.md
+- Ruins & rebuilding → references/agot/agot-ruins.md
+- Mega wars → references/agot/agot-mega-wars.md
+- Coronation → references/agot/agot-coronation.md
+- Bastards & bloodlines → references/agot/agot-bastards-bloodlines.md
+- Magic level system → references/agot/agot-magic-level.md
+- Faceless Men & secret identity → references/agot/agot-faceless-men.md
+
+#### AGOT Extensions to Vanilla Systems
+- Casus belli (AGOT changes) → references/agot/agot-ext-casus-belli.md
+- Character interactions (AGOT) → references/agot/agot-ext-characters.md
+- Decisions (AGOT) → references/agot/agot-ext-decisions.md
+- Story cycles (AGOT) → references/agot/agot-ext-story-cycles.md
+- Buildings (AGOT) → references/agot/agot-ext-buildings.md
+- Culture (AGOT) → references/agot/agot-ext-culture.md
+- Traits (AGOT) → references/agot/agot-ext-traits.md
+- Men-at-arms (AGOT) → references/agot/agot-ext-men-at-arms.md
+- GUI (AGOT) → references/agot/agot-ext-gui.md
+- On actions (AGOT) → references/agot/agot-ext-on-actions.md
+- Scripted effects/triggers library → references/agot/agot-ext-scripted-library.md
+- GFX (AGOT) → references/agot/agot-ext-gfx.md
+- Map (AGOT) → references/agot/agot-ext-map.md
+- Ethnicities & DNA (AGOT) → references/agot/agot-ext-appearance.md
+- Religion (AGOT) → references/agot/agot-ext-religion.md
+- Governments & laws (AGOT) → references/agot/agot-ext-governments.md
 
 ### I want to understand game structure
 - Vanilla folder tree → references/structure/vanilla-tree.md

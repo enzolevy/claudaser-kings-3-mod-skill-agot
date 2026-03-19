@@ -1,5 +1,8 @@
 # Creating Men-at-Arms Types — Practical Recipe
 
+> **AGOT:** This system is significantly modified by AGOT.
+> Before modding this for AGOT, also read: [references/agot/agot-ext-men-at-arms.md](../agot/agot-ext-men-at-arms.md)
+
 ## What You Need to Know First
 Men-at-Arms (MaA) are regiment types that rulers recruit for gold/prestige. Each type has combat stats (damage, toughness, pursuit, screen), terrain modifiers, counter relationships against other archetypes, and cost structures. They are defined in `common/men_at_arms_types/` and need localization. Illustrations are optional but recommended.
 
