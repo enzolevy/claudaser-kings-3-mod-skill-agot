@@ -1,5 +1,5 @@
 ---
-name: ck3-modding
+name: claudaser-kings-3-agot
 description: >
   CK3 modding skill for Crusader Kings 3. Use when creating, editing, or debugging
   CK3 mods, writing Paradox Script, working with events, decisions, traits, CBs,
