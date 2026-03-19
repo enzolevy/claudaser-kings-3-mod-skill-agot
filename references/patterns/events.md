@@ -16,6 +16,7 @@ my_mod.0001 = {
 	desc = my_mod.0001.desc
 
 	theme = diplomacy
+	cooldown = { years = 5 }   # Prevents re-firing on same character
 
 	left_portrait = {
 		character = root
@@ -58,6 +59,69 @@ war_over_win, war_over_loss, war_standing_army
 **Emotion/state animations:**
 pain, fear, anger, worry, sadness, schadenfreude, happiness, boredom, flirtation, shock, disgust, admiration, prison, sick, dismissal, paranoia, shame, grief, rage, stress, ecstasy, mad
 
+### Portrait Features
+
+**Portrait positions:** Events support multiple portrait positions beyond `left_portrait` and `right_portrait`:
+- `center_portrait` — large centered portrait
+- `lower_left_portrait` — small portrait, bottom-left
+- `lower_center_portrait` — small portrait, bottom-center
+- `lower_right_portrait` — small portrait, bottom-right
+
+**Triggered animations** — select animation dynamically based on character state:
+```
+left_portrait = {
+    character = root
+    animation = idle
+    triggered_animation = {
+        trigger = { has_trait = brave }
+        animation = personality_bold
+    }
+    triggered_animation = {
+        trigger = { is_at_war = yes }
+        animation = war_standing_army
+    }
+}
+```
+Multiple `triggered_animation` blocks are evaluated in order; the first matching trigger wins. The base `animation` is the fallback if none match.
+
+**Hiding character identity** — use `hide_info = yes` in a portrait block to hide all identifying UI (name, traits, etc.) for "mysterious stranger" events:
+```
+right_portrait = {
+    character = scope:mystery_person
+    animation = idle
+    hide_info = yes
+}
+```
+
+**Artifact display** — show an artifact in an event window:
+```
+artifact = {
+    target = scope:the_artifact
+    position = lower_center_portrait
+}
+```
+
+## Event Types
+
+The most common type is `character_event`. Other types exist for specialized presentation:
+
+### Letter Events
+```
+my_letter = {
+    type = letter_event
+    sender = scope:letter_sender    # Required for letter_event
+    opening = { ... }
+    desc = { ... }
+
+    option = {
+        name = my_letter.a
+    }
+}
+```
+The `sender` field is required for `letter_event` — it determines who the letter appears to come from. The `opening` block is the salutation line (e.g., "Dear liege,").
+
+Other specialized types: `type = court_event`, `type = activity_event`.
+
 ## Themes
 
 Common event themes:
@@ -65,6 +129,22 @@ Common event themes:
 - **General:** default, realm, diplomacy, intrigue, martial, stewardship, learning
 - **Conflict/dark:** war, battle, siege, death, dread, dungeon, healthcare, faith, culture
 - **Social/activity:** seduce, romance, feast, hunt, murder, friend, rival, pet
+
+### Theme Overrides
+
+You can conditionally override the background or sound of a theme using `override_background` and `override_sound`:
+```
+override_background = {
+    trigger = { is_at_war = yes }
+    reference = "gfx/interface/illustrations/event_scenes/ep2_feast.dds"
+}
+
+override_sound = {
+    trigger = { has_trait = lunatic }
+    reference = "event:/SFX/Events/Misc/mad_laughter"
+}
+```
+These go inside the event body alongside `theme`. Multiple overrides can be defined; the first matching trigger wins.
 
 ## Event Backgrounds
 
@@ -129,6 +209,54 @@ my_mod.0002 = {
 			generous = medium_stress_loss
 		}
 	}
+}
+```
+
+### Event Options — Advanced
+
+**Showing unavailable options (grayed-out)** — instead of hiding options the player can't pick, show them disabled with `show_as_unavailable`:
+```
+option = {
+    name = event.expensive_option
+    trigger = { gold >= 100 }
+    show_as_unavailable = { gold < 100 }   # Shows grayed-out instead of hidden
+    effect = { remove_short_term_gold = 100 }
+}
+```
+The `trigger` controls whether the option is actually pickable. The `show_as_unavailable` block shows the option grayed-out with a tooltip explaining why, so the player knows it exists.
+
+**AI behavior on options:**
+```
+option = {
+    name = event.a
+    ai_chance = { base = 10 modifier = { add = 20 has_trait = greedy } }
+    # OR use ai_will_select (script value syntax, mutually exclusive with ai_chance):
+    # ai_will_select = { base = 10 if = { limit = { has_trait = greedy } add = 20 } }
+}
+```
+Use `ai_chance` for weighted random selection among options. Use `ai_will_select` for deterministic selection (highest value wins). They are mutually exclusive — do not use both on the same option.
+
+**Dynamic option names** — option names support the same `triggered_desc` / `first_valid` pattern as `desc`:
+```
+option = {
+    name = {
+        first_valid = {
+            triggered_desc = {
+                trigger = { has_trait = greedy }
+                desc = event.option_greedy
+            }
+            desc = event.option_default
+        }
+    }
+}
+```
+
+**Flavor text inside options** — use `flavor` to add narrative text before the mechanical effects:
+```
+option = {
+    name = event.a
+    flavor = event.a.flavor    # Loc key for italic flavor text
+    add_gold = 100
 }
 ```
 
@@ -230,6 +358,29 @@ my_mod.0015 = {
 
 The `after = { }` block runs AFTER whichever option the player picks. This is useful for cleanup (removing flags, clearing variables) that should happen regardless of choice, so you don't have to duplicate cleanup code in every option.
 
+### Event with `on_trigger_fail`
+```
+my_mod.0025 = {
+	type = character_event
+	title = my_mod.0025.t
+	desc = my_mod.0025.desc
+	theme = intrigue
+
+	trigger = { exists = scope:target_char }
+
+	on_trigger_fail = {
+		# Runs if a queued/delayed event fails its trigger
+		# Use for cleanup when delayed events become invalid
+		scope:quest_giver = { remove_character_flag = waiting_for_result }
+	}
+
+	option = {
+		name = my_mod.0025.a
+	}
+}
+```
+`on_trigger_fail` is critical for delayed events (`trigger_event` with `days`). If the trigger is no longer valid when the event tries to fire (e.g., the target character died), the `on_trigger_fail` block runs instead, letting you clean up flags, variables, or other state.
+
 ### Scripted effects defined locally in event file
 ```
 namespace = my_mod
@@ -248,6 +399,57 @@ my_mod.0020 = {
 	}
 }
 ```
+
+### Event Widgets
+
+Widgets allow player interaction beyond simple option buttons (naming characters, entering text, viewing progress):
+```
+my_mod.0030 = {
+    type = character_event
+    title = my_mod.0030.t
+    desc = my_mod.0030.desc
+    theme = diplomacy
+
+    widgets = {
+        widget = {
+            gui = "event_window_widget_name_character"
+            container = "custom_widget_container"
+            controller = name_character    # Player names a character
+            setup_scope = { saved_scope = scope:child }
+        }
+    }
+
+    option = {
+        name = my_mod.0030.a
+    }
+}
+```
+
+**Available widget controllers:**
+- `name_character` — lets the player name a character (e.g., newborn naming events)
+- `text` — free text input from the player
+- `event_chain_progress` — displays a progress bar for event chains
+- `default` — generic widget with no special controller behavior
+
+The `gui` field references a widget GUI definition, `container` is the UI container in the event window, and `setup_scope` passes the relevant scope to the widget.
+
+### Scope = none (Global Events)
+
+Events can use `scope = none` for global events that have no character root:
+```
+my_mod.9999 = {
+    type = character_event
+    scope = none    # No root character — for global/system events
+    title = my_mod.9999.t
+    desc = my_mod.9999.desc
+    theme = default
+
+    option = {
+        name = my_mod.9999.a
+    }
+}
+```
+This is useful for events fired from `on_game_start` or other on_actions that don't have a character scope.
 
 ## On_actions Reference
 
@@ -268,7 +470,122 @@ Common on_actions and their ROOT scope:
 | `on_game_start` | (no character scope) |
 | `on_game_start_after_lobby` | (no character scope) |
 
-**Yearly on_actions** (`random_yearly`, `yearly_playable`, `five_year_playable`, etc.) — ROOT = a random character matching the on_action's criteria.
+**Yearly/pulse on_actions:** ROOT = a random character matching the on_action's criteria.
+- `yearly_global_pulse` — fires once per year, no character scope
+- `on_yearly_playable` — fires for each playable character once per year
+- `three_year_playable_pulse` — every 3 years for playable characters
+- `five_year_playable_pulse` — every 5 years for playable characters
+- `quarterly_playable_pulse` — every 3 months for playable characters
+- `random_yearly_playable_pulse` — once per year for a random playable character
+- `random_yearly_everyone_pulse` — once per year for a random character (including non-playable)
+
+### On_action Structure — Advanced
+
+On_actions support more than just event lists. Full structure:
+
+**Direct effect block** — runs effects directly, concurrently with events. Note: scopes set in `effect` do NOT carry into fired events.
+```
+my_on_action = {
+    effect = {
+        every_player = { add_prestige = 10 }
+    }
+    events = {
+        my_mod.0001
+    }
+}
+```
+
+**first_valid** — fires the first event whose trigger passes:
+```
+my_on_action = {
+    first_valid = {
+        my_mod.0001    # Tried first
+        my_mod.0002    # Tried if .0001's trigger fails
+        my_mod.0099    # Fallback
+    }
+}
+```
+
+**random_on_actions** — weighted random selection among sub-on_actions:
+```
+my_on_action = {
+    random_on_actions = {
+        100 = on_action_a
+        200 = on_action_b
+    }
+}
+```
+
+**first_valid_on_action** — fires the first sub-on_action whose trigger passes:
+```
+my_on_action = {
+    first_valid_on_action = {
+        on_action_a
+        on_action_b
+    }
+}
+```
+
+**delay** — adds a delay between events in a list:
+```
+my_on_action = {
+    events = {
+        my_mod.0001
+        delay = { days = 365 }
+        my_mod.0002    # Fires 365 days after .0001
+    }
+}
+```
+
+**chance_to_happen** — percentage gate evaluated before the on_action's events:
+```
+my_on_action = {
+    chance_to_happen = 25    # 25% chance this on_action does anything at all
+    events = {
+        my_mod.0001
+    }
+}
+```
+
+**fallback** — fires another on_action if nothing in this one fired:
+```
+my_on_action = {
+    fallback = another_on_action
+    events = {
+        my_mod.0001
+    }
+}
+```
+
+**Firing an on_action from script** — use `trigger_event` with `on_action`:
+```
+trigger_event = { on_action = my_on_action }
+```
+
+**Zero-weight entry trick** — in `random_events`, use `100 = 0` to create a weighted chance of nothing firing (alternative to `chance_of_no_event`):
+```
+random_events = {
+    100 = 0              # 50% chance nothing fires
+    50 = my_mod.0001
+    50 = my_mod.0002
+}
+```
+
+### Appending to Vanilla On_actions (Safe Pattern)
+
+To add your events to a vanilla on_action without overriding it, nest your own on_action inside:
+```
+# In your mod's common/on_actions/my_mod_on_actions.txt
+# This is SAFE — it appends, does NOT override vanilla:
+some_vanilla_on_action = {
+    on_actions = { my_mod_on_action }
+}
+
+my_mod_on_action = {
+    events = { my_mod.0001 }
+}
+```
+This works because CK3 merges on_action files additively. Your `on_actions = { ... }` list gets appended to the vanilla definition rather than replacing it.
 
 ## Checklist
 - [ ] Event file in `events/` folder with `.txt` extension

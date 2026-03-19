@@ -68,6 +68,9 @@ First-time setup instructions: read references/setup.md
 - Create a decision → references/patterns/decisions.md
 - Create a trait → references/patterns/traits.md
 - Create a building → references/patterns/buildings.md
+- Create a scheme (murder, seduce, etc.) → references/patterns/schemes.md
+- Create a court position → references/patterns/court-positions.md
+- Create an activity (feast, hunt, etc.) → references/patterns/activities.md
 - Create a character interaction → references/patterns/characters.md
 - Create a casus belli → references/patterns/casus-belli.md
 - Modify culture/religion → references/patterns/culture-religion.md

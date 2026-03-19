@@ -99,6 +99,9 @@ claudaser-kings-3-mod-skill/
 │   │   ├── decisions.md                  # Decisions, widgets, AI behavior
 │   │   ├── traits.md                     # Traits, XP tracks, compatibility
 │   │   ├── buildings.md                  # Buildings (regular, special, duchy, map objects)
+│   │   ├── schemes.md                    # Schemes (murder, seduce, befriend, custom)
+│   │   ├── court-positions.md            # Court positions (aptitude, salary, modifiers)
+│   │   ├── activities.md                 # Activities (feasts, hunts, tournaments, phases)
 │   │   ├── characters.md                 # Character interactions, schemes
 │   │   ├── localization.md               # Localization conventions
 │   │   ├── casus-belli.md                # Custom CBs, war logic

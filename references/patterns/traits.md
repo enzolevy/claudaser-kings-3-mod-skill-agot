@@ -137,51 +137,59 @@ my_immortal_trait = {
 ```
 Use `set_immortal_age = 30` effect to keep them visually young.
 
-## Checklist
-- [ ] Trait file in `common/traits/` with `.txt` extension
-- [ ] Localization: `trait_<key>` and `trait_<key>_desc`
-- [ ] Icon at `gfx/interface/icons/traits/<key>.dds` (60x60 pixels)
-- [ ] Category set (personality, education, health, etc.)
-- [ ] Test: `effect add_trait = my_custom_trait` in console
-
-## Common Pitfalls
-- **Same-trait opinion**: Use `same_opinion = 10`, NOT `triggered_opinion`. `triggered_opinion` is for faith-based virtue/sin mechanics and requires a `parameter` referencing a doctrine. Without it, you get a broken `TRAIT_DESC_POSITIVE_FOR_THEM` tooltip
-- **Trait name conflict**: If your trait key matches a vanilla trait, it will override it. Use a unique prefix
-- **Missing icon**: The game will show a blank icon. Default path is `gfx/interface/icons/traits/<trait_key>.dds`
-- **Localization keys**: Default is `trait_<key>`, not just `<key>`. This is different from decisions!
-- **Opposite traits**: If you set `opposite = X`, a character can't have both traits simultaneously
-- **Genetic traits**: Set `genetic = yes` for proper inheritance behavior. Without it, `inherit_chance` uses simpler logic
-- **Dynamic names/icons**: If using `name = { first_valid = { ... } }`, include a fallback for `NOT = { exists = this }` to avoid errors when the trait is displayed without a character context
-
 ## XP Tracks / Trait Progression
 
-Traits can have XP-based progression (like lifestyle traits). Pattern:
+Traits can have XP-based progression using inline `track` or `tracks` blocks. XP thresholds are integers 0-100 in ascending order, each defining cumulative modifiers at that level.
+
+### Single track (shorthand — track is named after the trait)
 ```
-my_warrior_1 = {
+my_leveling_trait = {
     category = lifestyle
-
-    # XP track — this trait upgrades when XP threshold is reached
-    track = { max = 100 }
-
-    # Next trait in progression
-    next_trait = my_warrior_2
-
-    # Modifiers
     martial = 2
-    prowess = 1
-}
 
-my_warrior_2 = {
-    category = lifestyle
-    track = { max = 200 }
-    previous_trait = my_warrior_1
-    next_trait = my_warrior_3
-    martial = 4
-    prowess = 2
+    track = {
+        50 = {
+            martial = 2
+            prowess = 1
+        }
+        100 = {
+            martial = 4
+            prowess = 3
+            health = 0.25
+        }
+    }
 }
 ```
-- XP is added via `add_trait_xp = { trait = my_warrior_1 value = 10 }` effect
-- When XP reaches track max, trait automatically upgrades to next_trait
+
+### Multiple tracks
+```
+my_multi_trait = {
+    category = lifestyle
+
+    tracks = {
+        combat = {
+            30 = { prowess = 1 }
+            65 = { prowess = 2 martial = 1 }
+            100 = { prowess = 4 martial = 2 }
+        }
+        tactics = {
+            30 = { martial = 1 }
+            65 = { martial = 2 }
+            100 = { martial = 4 }
+        }
+    }
+}
+```
+
+### Degradation
+`monthly_track_xp_degradation = { min = 20 change = 5 }` — loses 5 XP per month, never dropping below 20.
+
+### Adding/Checking XP
+- Add XP via effect: `add_trait_xp = { trait = X track = X value = 10 }`
+- Check XP via trigger: `has_trait_xp = { trait = X track = X value >= 50 }`
+
+### Track Localization
+Each track needs its own loc keys: `trait_track_<name>` and `trait_track_<name>_desc`.
 
 ## Compatibility Block
 
@@ -223,3 +231,144 @@ my_trait_opinion = {
 }
 ```
 And the parameter refers to a doctrine parameter. The opinion applies when the CHARACTER EVALUATING has a faith with that doctrine parameter active.
+
+## Trait Flags and Restrictions
+
+```
+my_restricted_trait = {
+    valid_sex = male              # all/male/female
+    minimum_age = 16
+    maximum_age = 65
+
+    # Prevent title inheritance
+    inheritance_blocker = all     # none/dynasty/all
+
+    # Physical/incapacitating
+    physical = yes
+    incapacitating = yes          # Character needs a regent
+    disables_combat_leadership = yes
+    can_have_children = no        # Sterility
+
+    # Encyclopedia/ruler designer visibility
+    shown_in_encyclopedia = yes
+    shown_in_ruler_designer = yes
+    ruler_designer_cost = 50
+}
+```
+
+`flag = <name>` — tags the trait with a named flag, checkable via triggers (e.g., `has_trait_flag = <name>`). Useful for grouping traits for scripted checks without requiring a full trait group.
+
+## Culture and Faith Conditional Modifiers
+
+```
+my_cultural_trait = {
+    # Modifiers that only apply if holder's culture has the parameter
+    culture_modifier = {
+        parameter = has_warrior_culture
+        prowess = 2
+        martial = 1
+    }
+
+    # Modifiers that only apply if holder's faith has the doctrine parameter
+    faith_modifier = {
+        parameter = tenet_warmonger
+        monthly_piety = 0.5
+    }
+}
+```
+
+## Genetic Trait Advanced Options
+
+```
+my_genetic_trait = {
+    genetic = yes
+    inherit_chance = 25
+    birth = 10                    # % chance at birth (no parent needed)
+
+    # Which parent can pass it / which child can inherit
+    parent_inheritance_sex = all  # male/female/all
+    child_inheritance_sex = all   # male/female/all
+    inherit_from_real_father = yes
+    inherit_from_real_mother = yes
+    both_parent_has_trait_inherit_chance = 50  # Higher if both parents have it
+
+    # Random character generation
+    random_creation = 5           # % chance on random char creation
+    random_creation_weight = 2    # Weight multiplier
+
+    # Portrait effects
+    genetic_constraint_all = beauty     # Constrains gene morphing
+    portrait_extremity_shift = 0.25     # Shifts morph genes toward extremes
+}
+```
+
+## Trait Groups
+
+```
+my_trait = {
+    group = my_trait_group          # Group for inheritance equivalence
+    group_equivalence = alt_group   # Separate group for equivalence checks
+    level = 2                       # Level within group (for tiered traits)
+}
+```
+
+## Commander Trait Terrain Restriction
+
+```
+my_desert_commander = {
+    category = commander
+    # Only available if ruler's realm contains these terrains
+    trait_exclusive_if_realm_contains = { desert drylands }
+}
+```
+
+## Dynamic Names/Descriptions/Icons
+
+```
+my_dynamic_trait = {
+    name = {
+        first_valid = {
+            triggered_desc = {
+                trigger = { is_female = yes }
+                desc = trait_my_dynamic_female
+            }
+            desc = trait_my_dynamic_male
+        }
+    }
+    desc = {
+        first_valid = {
+            triggered_desc = {
+                trigger = { has_trait_xp = { trait = my_dynamic_trait track = my_dynamic_trait value >= 50 } }
+                desc = trait_my_dynamic_desc_high
+            }
+            desc = trait_my_dynamic_desc_default
+        }
+    }
+    icon = {
+        first_valid = {
+            triggered_desc = {
+                trigger = { is_female = yes }
+                desc = my_dynamic_trait_female_icon    # maps to gfx path
+            }
+            desc = my_dynamic_trait_icon
+        }
+    }
+}
+```
+The fallback `desc = X` MUST exist in each block. Without it, characters who don't match any trigger will have NO name/desc/icon.
+
+## Checklist
+- [ ] Trait file in `common/traits/` with `.txt` extension
+- [ ] Localization: `trait_<key>` and `trait_<key>_desc`
+- [ ] Icon at `gfx/interface/icons/traits/<key>.dds` (60x60 pixels)
+- [ ] Category set (personality, education, health, etc.)
+- [ ] Test: `effect add_trait = my_custom_trait` in console
+
+## Common Pitfalls
+- **Same-trait opinion**: Use `same_opinion = 10`, NOT `triggered_opinion`. `triggered_opinion` is for faith-based virtue/sin mechanics and requires a `parameter` referencing a doctrine. Without it, you get a broken `TRAIT_DESC_POSITIVE_FOR_THEM` tooltip
+- **Trait name conflict**: If your trait key matches a vanilla trait, it will override it. Use a unique prefix
+- **Missing icon**: The game will show a blank icon. Default path is `gfx/interface/icons/traits/<trait_key>.dds`
+- **Localization keys**: Default is `trait_<key>`, not just `<key>`. This is different from decisions!
+- **Opposite traits**: If you set `opposite = X`, a character can't have both traits simultaneously
+- **Genetic traits**: Set `genetic = yes` for proper inheritance behavior. Without it, `inherit_chance` uses simpler logic
+- **Dynamic names/icons**: If using `name = { first_valid = { ... } }`, include a fallback for `NOT = { exists = this }` to avoid errors when the trait is displayed without a character context

@@ -130,6 +130,65 @@ ai_will_do = {
 }
 ```
 
+## Title Override (Dynamic)
+
+The `title` field supports dynamic text, just like `desc`:
+```
+my_decision = {
+    title = {
+        first_valid = {
+            triggered_desc = {
+                trigger = { is_ruler = yes }
+                desc = my_decision_title_ruler
+            }
+            desc = my_decision_title_default
+        }
+    }
+}
+```
+
+## Conditional Picture
+
+Multiple `picture` blocks can be provided with triggers. The first matching trigger wins; the last entry without a trigger is the fallback:
+```
+picture = {
+    trigger = { has_trait = brave }
+    reference = "gfx/interface/illustrations/decisions/my_brave_pic.dds"
+}
+picture = {
+    reference = "gfx/interface/illustrations/decisions/my_default_pic.dds"
+}
+# First matching trigger wins; last entry is the fallback
+```
+
+## Confirm Text Override
+
+Override the default `<key>_confirm` localization key for the confirm button:
+```
+confirm_text = my_decision_custom_confirm   # Overrides default "<key>_confirm" loc key
+```
+
+## Cost vs Minimum Cost
+
+```
+# cost = { } — deducted when decision is taken
+cost = { gold = 200 prestige = 100 }
+
+# minimum_cost = { } — blocks taking if not affordable, but does NOT deduct
+# Use when cost is applied later (via event or widget choice)
+minimum_cost = { gold = 100 }
+```
+
+## should_create_alert
+
+Additional trigger controlling whether the decision shows an alert/notification. Even if the decision is available, this can suppress the nag:
+```
+should_create_alert = {
+    # Even if decision is available, don't nag the player unless:
+    gold >= 500
+}
+```
+
 ## Checklist
 - [ ] Decision file in `common/decisions/` with `.txt` extension
 - [ ] 4 localization keys: `decision_name`, `_desc`, `_tooltip`, `_confirm`
@@ -158,47 +217,50 @@ my_decision = {
         controller = decision_option_list_controller
 
         item = {
-            is_valid = { always = yes }
-            current_description = my_decision_option_desc
-            localization_values = {
-                VALUE = scope:value
-            }
-            effect = {
-                # Applied when this option is selected
-            }
+            value = flag:option_a
+            localization = my_decision_option_a
+            icon = "gfx/interface/icons/option_a.dds"
+            ai_chance = { value = 10 }
+            is_default = yes
+        }
+        item = {
+            value = flag:option_b
+            localization = my_decision_option_b
+            ai_chance = { value = 5 }
         }
     }
+    # Use scope:widget_value in the effect block to check which item was selected
 }
 ```
 
 ## ai_goal
 
-AI decision-making enhancement. The `ai_goal` block makes the AI actively work TOWARD meeting `is_valid` conditions:
+`ai_goal` is a **top-level boolean** on the decision (NOT a sub-block of `ai_will_do`). When set to `yes`, the AI budgets for this decision like it does for title creation or buildings, actively working toward meeting `is_valid` conditions. Note: when `ai_goal = yes`, `ai_check_interval` is ignored (less performant).
 ```
 my_decision = {
-    ai_check_interval = 36  # months
-
-    ai_potential = {
-        # Lightweight filter — checked BEFORE ai_will_do
-        is_adult = yes
-        is_landed = yes
-    }
+    ai_goal = yes              # AI budgets for this like title creation/buildings
+    # When ai_goal = yes, ai_check_interval is ignored (less performant)
 
     ai_will_do = {
         base = 0
-
-        modifier = {
-            add = 100
-            gold >= 500
-        }
-
-        # ai_goal weights make AI actively work TOWARD meeting is_valid conditions
-        ai_goal = {
-            gold >= 300
-            weight = 50
-        }
+        modifier = { add = 100 gold >= 500 }
     }
 }
+```
+
+## ai_check_interval_by_tier
+
+An alternative to `ai_check_interval` that lets you set different check intervals per title tier. All tiers must be defined:
+```
+ai_check_interval_by_tier = {
+    barony = 0      # AI barons never check
+    county = 10
+    duchy = 5
+    kingdom = 2
+    empire = 1
+    hegemony = 1
+}
+# All tiers must be defined. Alternative to ai_check_interval.
 ```
 
 ## Dynamic Descriptions for Decisions
