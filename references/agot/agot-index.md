@@ -56,3 +56,4 @@ These document how AGOT modifies vanilla CK3 systems. Each corresponds to a vani
 | [agot-ext-appearance.md](agot-ext-appearance.md) | — | AGOT ethnicities & DNA |
 | [agot-ext-religion.md](agot-ext-religion.md) | [culture-religion.md](../patterns/culture-religion.md) | AGOT religion modifications |
 | [agot-ext-governments.md](agot-ext-governments.md) | [governments.md](../patterns/governments.md) | AGOT government & law changes |
+| [agot-ext-flags.md](agot-ext-flags.md) | [flags.md](../patterns/flags.md) | AGOT character flags, government flags, flag conventions |
