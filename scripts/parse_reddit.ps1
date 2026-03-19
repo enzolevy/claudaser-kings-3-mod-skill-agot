@@ -5,10 +5,12 @@ param(
 )
 
 $json = Get-Content -Path $JsonPath -Raw | ConvertFrom-Json
-$posts = $json.data.children | Where-Object { $_.data.title -match "\[Release\]" } | Select-Object -First 5
+$posts = $json.data.children | Where-Object {
+    $_.data.title -match "(?i)\[(Release|Compatch)\].*Build"
+} | Select-Object -First 10
 
 if (-not $posts) {
-    Write-Host "No [Release] posts found on r/CK3AGOT." -ForegroundColor Yellow
+    Write-Host "No [Release] or [Compatch] posts found on r/CK3AGOT." -ForegroundColor Yellow
     exit
 }
 
