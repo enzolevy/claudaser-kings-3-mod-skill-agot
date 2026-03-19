@@ -25,23 +25,17 @@ Claudaser Kings 3 is a Claude Code skill that extracts documentation directly fr
 
 ## Installation
 
-### Option 1: Claude Code Plugin (recommended)
+### Option 1: Personal skill (available in all your projects)
 
 ```bash
-claude plugin marketplace add YOUR_USERNAME/claudaser-kings-3-mod-skill
-```
-
-### Option 2: Clone to personal skills
-
-```bash
-git clone https://github.com/YOUR_USERNAME/claudaser-kings-3-mod-skill.git \
+git clone https://github.com/enzolevy/claudaser-kings-3-mod-skill.git \
   ~/.claude/skills/ck3-modding
 ```
 
-### Option 3: Clone to project skills
+### Option 2: Project skill (available only in one project)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claudaser-kings-3-mod-skill.git \
+git clone https://github.com/enzolevy/claudaser-kings-3-mod-skill.git \
   .claude/skills/ck3-modding
 ```
 
