@@ -440,30 +440,120 @@ my_advanced_building = {
 }
 ```
 
-### Graphical Background for Map
-Buildings can define graphical assets for the 3D map:
-```
-my_castle_upgrade = {
-    # ... normal building fields ...
+### 3D Building Entities on the Map
 
-    # Asset shown on the 3D map
-    asset = {
-        type = pdxmesh
-        name = "building_western_castle_mesh"
-        illustration = "gfx/interface/illustrations/building_types/my_castle.dds"
-    }
+Buildings can display 3D models on the map via the `asset` field. There are two rendering paths with **different** placement behavior:
+
+#### Path 1: Special Building (type=special) with asset
+```
+my_special_building = {
+    type = special
+    asset = { type = entity name = "my_entity" provinces = { 1234 } }
+    # Entity is placed at SPECIAL_BUILDING_LOCATOR position+rotation
+}
+```
+- **Anchor**: `special_building_locators.txt` position (gfx/map/map_object_data/)
+- **Rotation**: quaternion Y from `special_building_locators.txt` (CCW viewed from above)
+- **Scale**: scale from `special_building_locators.txt`
+
+#### Path 2: Graphical Background (is_graphical_background=yes)
+```
+my_gfx_building = {
+    is_graphical_background = yes
+    is_enabled = { has_building = my_regular_building }
+    asset = { type = entity name = "my_entity" provinces = { 1234 } }
+    # Entity is placed at BUILDING_LOCATOR position+rotation
+}
+```
+- **Anchor**: `building_locators.txt` position
+- **Rotation**: quaternion Y from `building_locators.txt`
+- **Scale**: scale from `building_locators.txt`
+
+**CRITICAL**: The two locator files (`building_locators.txt` and `special_building_locators.txt`) have DIFFERENT rotations, positions, and scales per province. Using the wrong file produces misplaced entities.
+
+#### Two Locator Files
+Both in `gfx/map/map_object_data/`, same format, 7007 entries each:
+```
+{ id=1234 position={ X Y Z } rotation={ qx qy qz qw } scale={ sx sy sz } }
+```
+- `building_locators.txt` — used by graphical backgrounds and regular building rendering
+- `special_building_locators.txt` — used by type=special buildings with asset
+
+Y rotation = `2 * atan2(qy, qw)` radians (CCW when viewed from above).
+Scale is uniform (sx=sy=sz). Some provinces have reduced scale (e.g. Harrenhal 0.457).
+
+#### Creating Multi-Mesh Entities (Parent/Child Pattern)
+To place multiple 3D meshes per province (e.g. a cluster of buildings):
+
+```
+# Asset file: gfx/models/buildings/my_mod/my_entities.asset
+
+# Child entity (the actual mesh, shared across provinces)
+entity = {
+    name = "my_child_building_a_entity"
+    pdxmesh = "building_western_city_02_mesh"
+    scale = 1.4
+}
+
+# Parent entity (one per province, defines placement grid)
+entity = {
+    name = "my_city_prov_1234_entity"
+
+    # Locators define relative positions (entity-local space)
+    locator = { name = "pos_0" position = { 0.0 0.0 0.0 } }
+    locator = { name = "pos_1" position = { 5.0 0.0 3.0 } }
+    locator = { name = "pos_2" position = { -4.0 0.0 -2.0 } }
+
+    # Attach child entities to locators
+    attach = { "pos_0" = "my_child_building_a_entity" }
+    attach = { "pos_1" = "my_child_building_a_entity" }
+    attach = { "pos_2" = "my_child_building_a_entity" }
 }
 ```
 
-## Map Objects
-Map objects are separate from buildings but often paired with special buildings. They are defined in `gfx/map/map_object_data/`:
-```
-# gfx/map/map_object_data/my_building_objects.txt
-# These define 3D models placed on the map
+Entity-local coordinate system:
+- **X+** = East in world space (before rotation)
+- **Y** = height (0.0 = terrain surface)
+- **Z+** = North in world space (before rotation)
 
-# Usually you reference existing meshes and locators
-# Creating new map objects requires 3D modeling tools — out of scope for scripting
+The engine transforms local positions to world positions:
 ```
+world = locator_position + R(locator_rotation) × (entity_local × locator_scale)
+```
+
+To pre-compute positions that appear at specific world coordinates, counter-rotate and counter-scale:
+```python
+# Counter-rotation by -theta
+local_x = world_dx * cos(-theta) - world_dz * sin(-theta)
+local_z = world_dx * sin(-theta) + world_dz * cos(-theta)
+# Counter-scale
+local_x /= locator_scale
+local_z /= locator_scale
+```
+
+#### Asset Selection (provinces, graphical_regions, cultures)
+Multiple asset lines can be defined. The engine selects based on priority:
+1. `provinces = { 1234 }` — specific province IDs (highest priority)
+2. `governments = { feudal_government }` — government type
+3. `graphical_cultures = { western_building_gfx }` — culture's building_gfx
+4. `graphical_regions = { graphical_western }` — geographical region
+5. No filter = default fallback (lowest priority)
+
+#### Map Objects (Static Placement)
+Map objects in `gfx/map/map_object_data/` use absolute world coordinates — independent of the building system:
+```
+object={
+    name="My Static Object"
+    render_pass=Map
+    clamp_to_water_level=no
+    generated_content=no
+    layer="AGOT_building_layer"
+    pdxmesh="my_mesh"
+    count=1
+    transform="X Y Z qx qy qz qw sx sy sz"
+}
+```
+These are always visible (no conditional toggling) and NOT linked to the building system.
 
 ## Checklist
 - [ ] Building defined in `common/buildings/` as `.txt` file

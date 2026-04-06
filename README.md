@@ -37,15 +37,15 @@ This is the **AGOT Edition** of Claudaser Kings 3. It includes everything from t
 ### Option 1: Personal skill (available in all your projects)
 
 ```bash
-git clone https://github.com/elevybar/claudaser-kings-3-mod-skill-agot.git \
-  ~/.claude/skills/claudaser-kings-3-agot
+git clone https://github.com/elevybar/claudaser-kings-3-mod-skill.git \
+  ~/.claude/skills/ck3-modding
 ```
 
 ### Option 2: Project skill (available only in one project)
 
 ```bash
-git clone https://github.com/elevybar/claudaser-kings-3-mod-skill-agot.git \
-  .claude/skills/claudaser-kings-3-agot
+git clone https://github.com/elevybar/claudaser-kings-3-mod-skill.git \
+  .claude/skills/ck3-modding
 ```
 
 ## Setup
